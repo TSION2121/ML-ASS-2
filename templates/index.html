@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Model Performance</title>
+</head>
+<body>
+<h1>Model Performance Metrics</h1>
+
+<h2>Linear Regression Model (Overfitted)</h2>
+<p>Mean Squared Error (Train): {{ lr_metrics.mse_train }}</p>
+<p>Mean Squared Error (Test): {{ lr_metrics.mse_test }}</p>
+<p>
+    {% if lr_metrics.overfitting %}
+    <strong style="color: red;">The model is overfitting</strong>
+    {% else %}
+    <strong style="color: green;">The model is not overfitting</strong>
+    {% endif %}
+</p>
+<img src="{{ url_for('static', filename='learning_curve_Linear_Regression.png') }}" alt="Learning Curves for Linear Regression">
+
+<h2>Elastic Net Model (Regularized)</h2>
+<p>Mean Squared Error (Elastic Net): {{ en_metrics.mse_en }}</p>
+<p>Best Parameters: {{ en_metrics.best_params }}</p>
+<img src="{{ url_for('static', filename='learning_curve_Elastic_Net.png') }}" alt="Learning Curves for Elastic Net">
+</body>
+</html>
