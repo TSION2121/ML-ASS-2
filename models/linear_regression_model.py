@@ -1,12 +1,13 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.preprocessing import StandardScaler, PolynomialFeatures
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
 import os
+import numpy as np
 
 class LinearRegressionModel:
     def __init__(self):
@@ -88,14 +89,30 @@ class LinearRegressionModel:
         mse_train = mean_squared_error(y_train, y_pred_train)
         mse_test = mean_squared_error(y_test, y_pred_test)
 
+        mae_test = mean_absolute_error(y_test, y_pred_test)
+        rmse_test = np.sqrt(mse_test)
+        r2_test = r2_score(y_test, y_pred_test)
+
         self.plot_learning_curves(pipeline, X_train, y_train, X_test, y_test)
         print("Learning curves generated")
 
         overfitting = mse_train < mse_test and (mse_test - mse_train) > mse_train * 0.2  # Arbitrary threshold for demo
 
-        return {'mse_train': mse_train, 'mse_test': mse_test, 'overfitting': overfitting}
+        return {
+            'mse_train': mse_train,
+            'mse_test': mse_test,
+            'mae_test': mae_test,
+            'rmse_test': rmse_test,
+            'r2_test': r2_test,
+            'overfitting': overfitting
+        }
 
 if __name__ == "__main__":
     lr_model = LinearRegressionModel()
     metrics = lr_model.train_and_evaluate_model()
-    print(metrics)
+    print(f"Mean Squared Error (Train): {metrics['mse_train']}")
+    print(f"Mean Squared Error (Test): {metrics['mse_test']}")
+    print(f"Mean Absolute Error (Test): {metrics['mae_test']}")
+    print(f"Root Mean Squared Error (Test): {metrics['rmse_test']}")
+    print(f"R² Score (Test): {metrics['r2_test']}")
+    print(f"Overfitting: {metrics['overfitting']}")
